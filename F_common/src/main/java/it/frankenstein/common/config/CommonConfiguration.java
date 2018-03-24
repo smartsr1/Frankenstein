@@ -1,5 +1,7 @@
 package it.frankenstein.common.config;
 
+import java.util.List;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +13,10 @@ public class CommonConfiguration {
 	private String	price;
 	private String	dataUrl;
 	private String	coreUrl;
+	private List<String> symbol;
+	private String timeframe;
+	private String recent;
+	
 
 	public String getDataUrl() {
 		return dataUrl;
@@ -42,6 +48,30 @@ public class CommonConfiguration {
 
 	public void setCoreUrl(String coreUrl) {
 		this.coreUrl = coreUrl;
+	}
+
+	public List<String> getSymbol() {
+		return symbol;
+	}
+
+	public void setSymbol(List<String> symbol) {
+		this.symbol = symbol;
+	}
+
+	public String getTimeframe() {
+		return timeframe;
+	}
+
+	public void setTimeframe(String timeframe) {
+		this.timeframe = timeframe;
+	}
+
+	public String getRecent() {
+		return recent;
+	}
+
+	public void setRecent(String recent) {
+		this.recent = recent;
 	}
 
 }

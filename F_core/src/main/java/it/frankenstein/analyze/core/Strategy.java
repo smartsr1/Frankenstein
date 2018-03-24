@@ -1,5 +1,7 @@
 package it.frankenstein.analyze.core;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import it.frankenstein.analyze.service.Service;
@@ -15,7 +17,8 @@ public class Strategy {
 
 	public void test() {
 		// download data
-		String data = service.getData();
+		List<String> data = service.getData();
+		
 		// gestiore i dati e applicare la strategia
 		// call post acquisto binance ( io direi di chiamare bin tramite il module data in modulo data)
 		service.acquire();

@@ -10,6 +10,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJsonProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -59,6 +60,7 @@ public class DataApplication {
 		sslContext.init(null, trustManager, null);
 
 		ClientConfig config = new DefaultClientConfig();
+		config.getClasses().add(JacksonJsonProvider.class);
 		HostnameVerifier hostnameVerifier = HttpsURLConnection.getDefaultHostnameVerifier();
 		HTTPSProperties prop = new HTTPSProperties(hostnameVerifier, sslContext);
 		config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES, prop);

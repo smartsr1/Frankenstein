@@ -1,5 +1,6 @@
 package it.frankenstein.analyze.controller;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.ws.rs.GET;
@@ -11,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import it.frankenstein.analyze.service.Service;
 
-@Path("/data")
+@Path("/core")
 public class RestController {
 
 	private final Service service;
@@ -24,7 +25,7 @@ public class RestController {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("/getdata")
-	public String price() throws InterruptedException, ExecutionException {
+	public List<String> data() throws InterruptedException, ExecutionException {
 		return service.getData();
 	}
 
