@@ -21,10 +21,10 @@ public class Strategy {
 		
 		// gestiore i dati e applicare la strategia
 		// call post acquisto binance ( io direi di chiamare bin tramite il module data in modulo data)
-		service.acquire();
+		service.acquire("symbol");
 		// applicare stategia vendita
 		// call post vendita binance ( io direi di chiamare bin tramite il module data in modulo data)
-		service.dispose();
+		service.dispose("symbol");
 		// reiniziare dall'acquisto...
 
 	}
