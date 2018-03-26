@@ -34,7 +34,7 @@ public class Service {
 				.accept(MediaType.APPLICATION_JSON)
 				.get(ClientResponse.class);
 
-		Data item = response.getEntity(Data.class);;
+		Data item = response.getEntity(Data.class);
 		return item.getPrices();
 	}
 
