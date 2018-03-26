@@ -1,8 +1,6 @@
 package it.frankenstein.data.service;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -12,14 +10,11 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.UniformInterfaceException;
 
 import it.frankenstein.common.config.CommonConfiguration;
 import it.frankenstein.data.config.DataConf;
@@ -35,11 +30,11 @@ public class Service {
 	private final DataHandler dataHandler;
 
 	@Autowired
-	public Service(Client c, CommonConfiguration commonConfig, DataConf dataConf, LogHandler logHandler) {
+	public Service(Client c, CommonConfiguration commonConfig, DataConf dataConf, DataHandler dataHandler) {
 		this.commonConfig = commonConfig;
 		this.c = c;
 		this.dataConf= dataConf;
-		this.dataHandler=logHandler;
+		this.dataHandler=dataHandler;
 	}
 
 	public String getPrice() throws InterruptedException, ExecutionException {

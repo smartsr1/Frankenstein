@@ -1,5 +1,10 @@
 package it.frankenstein.data.handler;
 
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
+
+@Profile("LOG")
+@Component
 public class LogHandler implements DataHandler{
 
 
