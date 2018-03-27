@@ -15,47 +15,50 @@ import it.frankenstein.data.config.DataConf;
 import it.frankenstein.data.service.Service;
 
 @Component
-public class DataCollectionThread extends Thread{
-	
-	public LinkedList<String> prices=new LinkedList<>();
-	private Service service;
-	private DataConf conf;
-	private CommonConfiguration commonConfig;
-	
+public class DataCollectionThread extends Thread {
+
+	public LinkedList<String>	prices	= new LinkedList<>();
+	private Service				service;
+	private DataConf			conf;
+	private CommonConfiguration	commonConfig;
+
 	@Autowired
-	public DataCollectionThread(Service service, CommonConfiguration commonConfig, DataConf conf){
-		this.service=service;
-		this.conf=conf;
-		this.commonConfig=commonConfig;
-		
+	public DataCollectionThread(Service service, CommonConfiguration commonConfig, DataConf conf) {
+		this.service = service;
+		this.conf = conf;
+		this.commonConfig = commonConfig;
+
 	}
+
 	@Override
-	public void run(){
-		while(true){
+	public void run() {
+		while (true) {
 			try {
-				Map<String, String> result=null;
+				Map<String, String> result = null;
 				try {
 					result = service.getList();
-				} catch (IOException e) {
+				}
+				catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				add(result);
 				Thread.sleep(conf.getRefresh());
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
 			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			catch (ExecutionException e) {}
 		}
 	}
-	
-	private void add(Map<String,String> s){
-		if(!CollectionUtils.isEmpty(prices) && prices.size()>=Integer.valueOf(commonConfig.getTimeframe())){
+
+	private void add(Map<String, String> s) {
+		if (!CollectionUtils.isEmpty(prices) && prices.size() >= Integer.valueOf(commonConfig.getTimeframe())) {
 			prices.removeFirst();
 		}
-		prices.addLast((String)s.get("price"));
+		prices.addLast(s.get("price"));
 	}
-	
+
 	public synchronized List<String> getPrices() {
 		return prices;
 	}
