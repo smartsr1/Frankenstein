@@ -30,16 +30,28 @@ public class DataController {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("/start")
-	public String start() throws InterruptedException, ExecutionException {
-		dataCollectionThread.start();
+	public String start() {
+		try {
+			dataCollectionThread.start();
+		}
+		catch (IllegalThreadStateException e) {
+			e.printStackTrace();
+			return "Already started";
+		}
 		return "ok";
 	}
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("/stop")
-	public String stop() throws InterruptedException, ExecutionException {
-		dataCollectionThread.interrupt();
+	public String stop() {
+		try {
+			dataCollectionThread.interrupt();
+		}
+		catch (SecurityException e) {
+			e.printStackTrace();
+			return "Error";
+		}
 		return "ok";
 	}
 
