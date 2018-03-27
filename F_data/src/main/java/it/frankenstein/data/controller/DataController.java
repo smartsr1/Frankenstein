@@ -3,8 +3,10 @@ package it.frankenstein.data.controller;
 import java.util.concurrent.ExecutionException;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -70,5 +72,22 @@ public class DataController {
 		data.setPrices(dataCollectionThread.getPrices());
 		return Response.ok().entity(data).build();
 	}
+	
+	@PUT
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Path("/acquire")
+	public Response acquire(@QueryParam(value = "symbol") String symbol	) {
+		service.acquire(symbol);
+		return Response.ok().build();
+	}
+	
+	@PUT
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Path("/dispose")
+	public Response dispose(@QueryParam(value = "symbol") String symbol) {
+		service.dispose(symbol);
+		return Response.ok().build();
+	}
+	
 
 }

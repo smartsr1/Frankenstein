@@ -34,18 +34,26 @@ public class Service {
 				.accept(MediaType.APPLICATION_JSON)
 				.get(ClientResponse.class);
 
-		Data item = response.getEntity(Data.class);;
+		Data item = response.getEntity(Data.class);
 		return item.getPrices();
 	}
 
-	public String acquire() {
-		String s = null;
-		return s;
+	public String acquire(String symbol) {
+		ClientResponse response = c.resource(commonConfig.getDataUrl())
+				.path("data/acquire")
+				.queryParam("symbol", symbol)
+				.accept(MediaType.APPLICATION_JSON)
+				.put(ClientResponse.class);
+		return response.getStatusInfo().getFamily().toString();
 	}
 
-	public String dispose() {
-		String s = null;
-		return s;
+	public String dispose(String symbol) {
+		ClientResponse response = c.resource(commonConfig.getDataUrl())
+				.path("data/dispose")
+				.queryParam("symbol", symbol)
+				.accept(MediaType.APPLICATION_JSON)
+				.put(ClientResponse.class);
+		return response.getStatusInfo().getFamily().toString();
 	}
 
 }
