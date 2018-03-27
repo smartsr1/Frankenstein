@@ -41,18 +41,18 @@ public class Service {
 	public String acquire(String symbol) {
 		ClientResponse response = c.resource(commonConfig.getDataUrl())
 				.path("data/acquire")
-				.queryParam("symbol",symbol)
+				.queryParam("symbol", symbol)
 				.accept(MediaType.APPLICATION_JSON)
-				.get(ClientResponse.class);
+				.put(ClientResponse.class);
 		return response.getStatusInfo().getFamily().toString();
 	}
 
 	public String dispose(String symbol) {
 		ClientResponse response = c.resource(commonConfig.getDataUrl())
 				.path("data/dispose")
-				.queryParam("symbol",symbol)
+				.queryParam("symbol", symbol)
 				.accept(MediaType.APPLICATION_JSON)
-				.get(ClientResponse.class);
+				.put(ClientResponse.class);
 		return response.getStatusInfo().getFamily().toString();
 	}
 
