@@ -47,6 +47,11 @@
 			<version>0.4.3</version>
 		</dependency>
 		<dependency>
+			<groupId>net.sf.supercsv</groupId>
+			<artifactId>super-csv</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<dependency>
 			<groupId>it.frankenstein</groupId>
 			<artifactId>F_common</artifactId>
 			<version>${project.version}</version>
