@@ -2,6 +2,7 @@ package it.frankenstein.analyze.core;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.frankenstein.analyze.service.Service;
@@ -11,6 +12,7 @@ public class Strategy {
 
 	public final Service service;
 
+	@Autowired
 	public Strategy(Service service) {
 		this.service = service;
 	}
