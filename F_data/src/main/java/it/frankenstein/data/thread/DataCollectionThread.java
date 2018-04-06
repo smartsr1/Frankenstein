@@ -54,10 +54,10 @@ public class DataCollectionThread extends Thread {
 	}
 
 	private void add(Map<String, String> s) {
-		if (!CollectionUtils.isEmpty(prices) && prices.size() >= Integer.valueOf(commonConfig.getTimeframe())) {
-			prices.removeFirst();
+		if (!CollectionUtils.isEmpty(prices) && prices.size() >= Integer.valueOf(commonConfig.getSamples())) {
+			prices.removeLast();
 		}
-		prices.addLast(s.get("price"));
+		prices.addFirst(s.get("price"));
 	}
 
 	public synchronized List<String> getPrices() {
