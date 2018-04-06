@@ -9,14 +9,14 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "common", ignoreInvalidFields = true)
 public class CommonConfiguration {
 
-	private String	url;
-	private String	price;
-	private String	dataUrl;
-	private String	coreUrl;
-	private List<String> symbol;
-	private String timeframe;
-	private String recent;
-	
+	private String			url;
+	private String			price;
+	private String			dataUrl;
+	private String			coreUrl;
+	private List<String>	symbol;
+	private String			timeframe;
+	private String			samples;
+	private String			recent;
 
 	public String getDataUrl() {
 		return dataUrl;
@@ -72,6 +72,14 @@ public class CommonConfiguration {
 
 	public void setRecent(String recent) {
 		this.recent = recent;
+	}
+
+	public String getSamples() {
+		return samples;
+	}
+
+	public void setSamples(String samples) {
+		this.samples = samples;
 	}
 
 }

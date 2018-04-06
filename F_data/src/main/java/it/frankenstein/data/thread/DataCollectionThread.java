@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -39,11 +40,11 @@ public class DataCollectionThread extends Thread {
 					result = service.getList();
 				}
 				catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				add(result);
-				Thread.sleep(conf.getRefresh());
+				Integer refres = Integer.valueOf(commonConfig.getTimeframe()) / Integer.valueOf(commonConfig.getSamples());
+				Thread.sleep(TimeUnit.SECONDS.toMillis(refres.longValue()));
 			}
 			catch (InterruptedException e) {
 				e.printStackTrace();
