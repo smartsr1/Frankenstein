@@ -1,5 +1,6 @@
 package it.frankenstein.data.controller;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import javax.ws.rs.GET;
@@ -11,6 +12,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import it.frankenstein.common.bean.Data;
 import it.frankenstein.data.service.Service;
@@ -72,22 +76,21 @@ public class DataController {
 		data.setPrices(dataCollectionThread.getPrices());
 		return Response.ok().entity(data).build();
 	}
-	
+
 	@PUT
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/acquire")
-	public Response acquire(@QueryParam(value = "symbol") String symbol	) {
+	public Response acquire(@QueryParam(value = "symbol") String symbol) throws InterruptedException, ExecutionException, JsonParseException, JsonMappingException, IOException {
 		service.acquire(symbol);
 		return Response.ok().build();
 	}
-	
+
 	@PUT
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/dispose")
-	public Response dispose(@QueryParam(value = "symbol") String symbol) {
+	public Response dispose(@QueryParam(value = "symbol") String symbol) throws JsonParseException, JsonMappingException, InterruptedException, ExecutionException, IOException {
 		service.dispose(symbol);
 		return Response.ok().build();
 	}
-	
 
 }

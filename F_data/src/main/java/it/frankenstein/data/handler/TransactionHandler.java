@@ -5,19 +5,18 @@ import org.springframework.stereotype.Component;
 
 @Profile("TRANS")
 @Component
-public class TransactionHandler implements DataHandler{
-
+public class TransactionHandler implements DataHandler {
 
 	@Override
-	public void handleAcquire() {
+	public void handleAcquire(String symbo, String price) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void handleDispose() {
+	public void handleDispose(String symbol, String price) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

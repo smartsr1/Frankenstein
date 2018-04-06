@@ -19,22 +19,21 @@ import com.sun.jersey.api.client.Client;
 import it.frankenstein.common.config.CommonConfiguration;
 import it.frankenstein.data.config.DataConf;
 import it.frankenstein.data.handler.DataHandler;
-import it.frankenstein.data.handler.LogHandler;
 
 @Component
 public class Service {
 
 	private final Client				c;
 	private final CommonConfiguration	commonConfig;
-	private final DataConf	dataConf;
-	private final DataHandler dataHandler;
+	private final DataConf				dataConf;
+	private final DataHandler			dataHandler;
 
 	@Autowired
 	public Service(Client c, CommonConfiguration commonConfig, DataConf dataConf, DataHandler dataHandler) {
 		this.commonConfig = commonConfig;
 		this.c = c;
-		this.dataConf= dataConf;
-		this.dataHandler=dataHandler;
+		this.dataConf = dataConf;
+		this.dataHandler = dataHandler;
 	}
 
 	public String getPrice() throws InterruptedException, ExecutionException {
@@ -43,26 +42,42 @@ public class Service {
 		return s;
 	}
 
-	public Map<String,String> getList() throws InterruptedException, ExecutionException, JsonParseException, JsonMappingException, IOException {
-		MultivaluedMap<String,String> params = new  MultivaluedHashMap<>();
+	public String getPrice(String symbol) throws InterruptedException, ExecutionException {
+		MultivaluedMap<String, String> params = new MultivaluedHashMap<>();
+		params.putSingle("symbol", symbol);
+		String s = c.asyncResource(commonConfig.getUrl())
+				.path(commonConfig.getPrice())
+				.queryParams(params)
+				.accept(MediaType.APPLICATION_JSON).get(String.class).get();
+		System.out.println(s);
+		return s;
+	}
+
+	public Map<String, String> getList() throws InterruptedException, ExecutionException, JsonParseException, JsonMappingException, IOException {
+		MultivaluedMap<String, String> params = new MultivaluedHashMap<>();
 		params.put("symbol", commonConfig.getSymbol());
-		String response =  c.asyncResource(commonConfig.getUrl())
+		String response = c.asyncResource(commonConfig.getUrl())
 				.path(commonConfig.getPrice())
 				.queryParams(params)
 				.accept(MediaType.APPLICATION_JSON).get(String.class).get();
 		ObjectMapper ob = new ObjectMapper();
-		Map<String, String> map  = ob.readValue(response, Map.class);
+		Map<String, String> map = ob.readValue(response, Map.class);
 		return map;
 	}
-	
-	public String acquire(String symbol)  {
-		dataHandler.handleAcquire();
+
+	public String acquire(String symbol) throws InterruptedException, ExecutionException, JsonParseException, JsonMappingException, IOException {
+		String price = getPrice(symbol);
+		ObjectMapper ob = new ObjectMapper();
+		Map<String, String> map = ob.readValue(price, Map.class);
+		dataHandler.handleAcquire(symbol, map.get("price"));
 		return "ok";
 	}
-	
-	
-	public String dispose(String symbol){
-		dataHandler.handleDispose();;
+
+	public String dispose(String symbol) throws InterruptedException, ExecutionException, JsonParseException, JsonMappingException, IOException {
+		String price = getPrice(symbol);
+		ObjectMapper ob = new ObjectMapper();
+		Map<String, String> map = ob.readValue(price, Map.class);
+		dataHandler.handleDispose(symbol, map.get("price"));;
 		return "ok";
 	}
 
