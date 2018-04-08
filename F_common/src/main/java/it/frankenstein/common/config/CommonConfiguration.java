@@ -14,8 +14,7 @@ public class CommonConfiguration {
 	private String			dataUrl;
 	private String			coreUrl;
 	private List<String>	symbol;
-	private String			timeframe;
-	private String			samples;
+	private List<String>	timeframeSamples;
 	private String			recent;
 
 	public String getDataUrl() {
@@ -58,14 +57,7 @@ public class CommonConfiguration {
 		this.symbol = symbol;
 	}
 
-	public String getTimeframe() {
-		return timeframe;
-	}
-
-	public void setTimeframe(String timeframe) {
-		this.timeframe = timeframe;
-	}
-
+	 
 	public String getRecent() {
 		return recent;
 	}
@@ -74,12 +66,12 @@ public class CommonConfiguration {
 		this.recent = recent;
 	}
 
-	public String getSamples() {
-		return samples;
+	public List<String> getTimeframeSamples() {
+		return timeframeSamples;
 	}
 
-	public void setSamples(String samples) {
-		this.samples = samples;
+	public void setTimeframeSamples(List<String> timeframeSamples) {
+		this.timeframeSamples = timeframeSamples;
 	}
 
 }

@@ -2,32 +2,23 @@ package it.frankenstein.data.thread;
 
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-
-import it.frankenstein.common.config.CommonConfiguration;
-import it.frankenstein.data.config.DataConf;
 import it.frankenstein.data.service.Service;
+import it.frankenstein.data.utils.DataUtility;
 
-@Component
 public class DataCollectionThread extends Thread {
 
-	public LinkedList<String>	prices	= new LinkedList<>();
+	private Map<String,LinkedList<String>>	prices;
 	private Service				service;
-	private DataConf			conf;
-	private CommonConfiguration	commonConfig;
-
-	@Autowired
-	public DataCollectionThread(Service service, CommonConfiguration commonConfig, DataConf conf) {
+	private String timeFrameSamples;
+	public DataCollectionThread(Service service, String timeFramesamples, Map<String,LinkedList<String>> prices) {
 		this.service = service;
-		this.conf = conf;
-		this.commonConfig = commonConfig;
+		this.timeFrameSamples=timeFramesamples;
+		this.prices= prices;
 
 	}
 
@@ -43,7 +34,7 @@ public class DataCollectionThread extends Thread {
 					e.printStackTrace();
 				}
 				add(result);
-				Integer refres = Integer.valueOf(commonConfig.getTimeframe()) / Integer.valueOf(commonConfig.getSamples());
+				Integer refres = DataUtility.getTimeFrame(timeFrameSamples) / DataUtility.getSamples(timeFrameSamples);
 				Thread.sleep(TimeUnit.SECONDS.toMillis(refres.longValue()));
 			}
 			catch (InterruptedException e) {
@@ -54,14 +45,10 @@ public class DataCollectionThread extends Thread {
 	}
 
 	private void add(Map<String, String> s) {
-		if (!CollectionUtils.isEmpty(prices) && prices.size() >= Integer.valueOf(commonConfig.getSamples())) {
-			prices.removeLast();
+		if (!CollectionUtils.isEmpty(prices) && !CollectionUtils.isEmpty(prices.get(timeFrameSamples)) && prices.get(timeFrameSamples).size() >= Integer.valueOf(DataUtility.getSamples(timeFrameSamples))) {
+			prices.get(timeFrameSamples).removeLast();
 		}
-		prices.addFirst(s.get("price"));
-	}
-
-	public synchronized List<String> getPrices() {
-		return prices;
+		prices.get(timeFrameSamples).addFirst(s.get("price"));
 	}
 
 }

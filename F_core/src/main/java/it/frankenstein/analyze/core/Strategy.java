@@ -1,6 +1,8 @@
 package it.frankenstein.analyze.core;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +21,9 @@ public class Strategy {
 
 	public void test() {
 		// download data
-		List<String> data = service.getData();
+		Map<String,LinkedList<String>> lists = service.getLists();
+		//or 
+		List<String> listStrategy = service.getData("600/10");
 		
 		// gestiore i dati e applicare la strategia
 		// call post acquisto binance ( io direi di chiamare bin tramite il module data in modulo data)

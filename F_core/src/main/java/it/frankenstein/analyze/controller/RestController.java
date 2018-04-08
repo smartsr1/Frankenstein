@@ -1,6 +1,8 @@
 package it.frankenstein.analyze.controller;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import javax.ws.rs.GET;
@@ -24,9 +26,9 @@ public class RestController {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
-	@Path("/getdata")
-	public List<String> data() throws InterruptedException, ExecutionException {
-		return service.getData();
+	@Path("/getLists")
+	public Map<String,LinkedList<String>> data() throws InterruptedException, ExecutionException {
+		return service.getLists();
 	}
 
 }

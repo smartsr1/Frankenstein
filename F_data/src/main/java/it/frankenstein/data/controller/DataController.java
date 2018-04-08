@@ -17,6 +17,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import it.frankenstein.common.bean.Data;
+import it.frankenstein.data.registry.ThreadRegistry;
 import it.frankenstein.data.service.Service;
 import it.frankenstein.data.thread.DataCollectionThread;
 
@@ -24,41 +25,13 @@ import it.frankenstein.data.thread.DataCollectionThread;
 public class DataController {
 
 	private final Service				service;
-	private final DataCollectionThread	dataCollectionThread;
+	private final ThreadRegistry	registry;
 
 	@Autowired
-	public DataController(Service service, DataCollectionThread dataCollectionThread) {
+	public DataController(Service service, ThreadRegistry registry) {
 		this.service = service;
-		this.dataCollectionThread = dataCollectionThread;
+		this.registry = registry;
 
-	}
-
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON })
-	@Path("/start")
-	public String start() {
-		try {
-			dataCollectionThread.start();
-		}
-		catch (IllegalThreadStateException e) {
-			e.printStackTrace();
-			return "Already started";
-		}
-		return "ok";
-	}
-
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON })
-	@Path("/stop")
-	public String stop() {
-		try {
-			dataCollectionThread.interrupt();
-		}
-		catch (SecurityException e) {
-			e.printStackTrace();
-			return "Error";
-		}
-		return "ok";
 	}
 
 	@GET
@@ -70,10 +43,20 @@ public class DataController {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/list")
+	@Path("/lists")
 	public Response list() {
 		Data data = new Data();
-		data.setPrices(dataCollectionThread.getPrices());
+		data.setPricesAll(registry.getPrices());
+		return Response.ok().entity(data).build();
+	}
+	
+	
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Path("/singleList")
+	public Response list(@QueryParam("stategy")String strategy) {
+		Data data = new Data();
+		data.setPricesStrategy(registry.getPrices().get(strategy));
 		return Response.ok().entity(data).build();
 	}
 

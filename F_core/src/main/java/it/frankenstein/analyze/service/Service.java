@@ -1,6 +1,8 @@
 package it.frankenstein.analyze.service;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 
@@ -28,16 +30,27 @@ public class Service {
 		this.commonConfig = commonConfig;
 	}
 
-	public List<String> getData() {
+	public Map<String,LinkedList<String>> getLists() {
 		ClientResponse response = c.resource(commonConfig.getDataUrl())
-				.path("data/list")
+				.path("data/lists")
 				.accept(MediaType.APPLICATION_JSON)
 				.get(ClientResponse.class);
 
 		Data item = response.getEntity(Data.class);
-		return item.getPrices();
+		return item.getPricesAll();
 	}
 
+	public List<String> getData(String strategy) {
+		ClientResponse response = c.resource(commonConfig.getDataUrl())
+				.path("data/list")
+				.queryParam("symbol", strategy)
+				.accept(MediaType.APPLICATION_JSON)
+				.get(ClientResponse.class);
+
+		Data item = response.getEntity(Data.class);
+		return item.getPricesStrategy();
+	}
+	
 	public String acquire(String symbol) {
 		ClientResponse response = c.resource(commonConfig.getDataUrl())
 				.path("data/acquire")
