@@ -42,8 +42,8 @@ public class Service {
 
 	public List<String> getData(String strategy) {
 		ClientResponse response = c.resource(commonConfig.getDataUrl())
-				.path("data/list")
-				.queryParam("symbol", strategy)
+				.path("data/singleList")
+				.queryParam("stategy", strategy)
 				.accept(MediaType.APPLICATION_JSON)
 				.get(ClientResponse.class);
 
