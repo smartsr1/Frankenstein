@@ -7,15 +7,15 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.util.CollectionUtils;
-import it.frankenstein.data.service.Service;
+import it.frankenstein.data.service.CallingApiService;
 import it.frankenstein.data.utils.DataUtility;
 
 public class DataCollectionThread extends Thread {
 
 	private Map<String,LinkedList<String>>	prices;
-	private Service				service;
+	private CallingApiService				service;
 	private String timeFrameSamples;
-	public DataCollectionThread(Service service, String timeFramesamples, Map<String,LinkedList<String>> prices) {
+	public DataCollectionThread(CallingApiService service, String timeFramesamples, Map<String,LinkedList<String>> prices) {
 		this.service = service;
 		this.timeFrameSamples=timeFramesamples;
 		this.prices= prices;

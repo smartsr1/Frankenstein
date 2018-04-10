@@ -13,9 +13,12 @@ public class CommonConfiguration {
 	private String			price;
 	private String			dataUrl;
 	private String			coreUrl;
-	private List<String>	symbol;
+	private List<String>	symbols;
 	private List<String>	timeframeSamples;
 	private String			recent;
+
+	private String			timeWindow;
+	private String			samples;
 
 	public String getDataUrl() {
 		return dataUrl;
@@ -49,15 +52,14 @@ public class CommonConfiguration {
 		this.coreUrl = coreUrl;
 	}
 
-	public List<String> getSymbol() {
-		return symbol;
+	public List<String> getSymbols() {
+		return symbols;
 	}
 
-	public void setSymbol(List<String> symbol) {
-		this.symbol = symbol;
+	public void setSymbols(List<String> symbols) {
+		this.symbols = symbols;
 	}
 
-	 
 	public String getRecent() {
 		return recent;
 	}
@@ -72,6 +74,22 @@ public class CommonConfiguration {
 
 	public void setTimeframeSamples(List<String> timeframeSamples) {
 		this.timeframeSamples = timeframeSamples;
+	}
+
+	public String getTimeWindow() {
+		return timeWindow;
+	}
+
+	public void setTimeWindow(String timeWindow) {
+		this.timeWindow = timeWindow;
+	}
+
+	public String getSamples() {
+		return samples;
+	}
+
+	public void setSamples(String samples) {
+		this.samples = samples;
 	}
 
 }

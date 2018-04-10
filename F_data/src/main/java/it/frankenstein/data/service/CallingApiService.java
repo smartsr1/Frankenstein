@@ -1,6 +1,7 @@
 package it.frankenstein.data.service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -21,7 +22,7 @@ import it.frankenstein.data.config.DataConf;
 import it.frankenstein.data.handler.DataHandler;
 
 @Component
-public class Service {
+public class CallingApiService {
 
 	private final Client				c;
 	private final CommonConfiguration	commonConfig;
@@ -29,7 +30,7 @@ public class Service {
 	private final DataHandler			dataHandler;
 
 	@Autowired
-	public Service(Client c, CommonConfiguration commonConfig, DataConf dataConf, DataHandler dataHandler) {
+	public CallingApiService(Client c, CommonConfiguration commonConfig, DataConf dataConf, DataHandler dataHandler) {
 		this.commonConfig = commonConfig;
 		this.c = c;
 		this.dataConf = dataConf;
@@ -53,12 +54,26 @@ public class Service {
 		return s;
 	}
 
-	public Map<String, String> getList() throws InterruptedException, ExecutionException, JsonParseException, JsonMappingException, IOException {
+	public Map<String, String> getList() throws JsonParseException, JsonMappingException, InterruptedException, ExecutionException, IOException {
+		return getList(commonConfig.getSymbols());
+	}
+
+	public Map<String, String> getList(List<String> list) throws InterruptedException, ExecutionException, JsonParseException, JsonMappingException, IOException {
 		MultivaluedMap<String, String> params = new MultivaluedHashMap<>();
-		params.put("symbol", commonConfig.getSymbol());
+		params.put("symbol", list);
 		String response = c.asyncResource(commonConfig.getUrl())
 				.path(commonConfig.getPrice())
 				.queryParams(params)
+				.accept(MediaType.APPLICATION_JSON).get(String.class).get();
+		ObjectMapper ob = new ObjectMapper();
+		Map<String, String> map = ob.readValue(response, Map.class);
+		return map;
+	}
+
+	public Map<String, String> getList(String symbol) throws InterruptedException, ExecutionException, JsonParseException, JsonMappingException, IOException {
+		String response = c.asyncResource(commonConfig.getUrl())
+				.path(commonConfig.getPrice())
+				.queryParam("symbol", symbol)
 				.accept(MediaType.APPLICATION_JSON).get(String.class).get();
 		ObjectMapper ob = new ObjectMapper();
 		Map<String, String> map = ob.readValue(response, Map.class);

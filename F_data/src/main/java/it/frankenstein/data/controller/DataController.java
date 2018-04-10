@@ -11,34 +11,33 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import it.frankenstein.common.bean.Data;
-import it.frankenstein.data.registry.ThreadRegistry;
-import it.frankenstein.data.service.Service;
-import it.frankenstein.data.thread.DataCollectionThread;
+import it.frankenstein.data.service.CallingApiService;
+import it.frankenstein.data.service.ListsPickerService;
 
 @Path("/data")
 public class DataController {
 
-	private final Service				service;
-	private final ThreadRegistry	registry;
+	private final CallingApiService		apiService;
+	private final ListsPickerService	pickerService;
 
 	@Autowired
-	public DataController(Service service, ThreadRegistry registry) {
-		this.service = service;
-		this.registry = registry;
-
+	public DataController(CallingApiService apiService, ListsPickerService pickerService) {
+		this.apiService = apiService;
+		this.pickerService = pickerService;
 	}
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Path("/price")
 	public String price() throws InterruptedException, ExecutionException {
-		return service.getPrice();
+		return apiService.getPrice();
 	}
 
 	@GET
@@ -46,17 +45,30 @@ public class DataController {
 	@Path("/lists")
 	public Response list() {
 		Data data = new Data();
-		data.setPricesAll(registry.getPrices());
+		data.setPricesAll(pickerService.getStrategyPrices());
 		return Response.ok().entity(data).build();
 	}
-	
-	
+
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Path("/singleList")
-	public Response list(@QueryParam("stategy")String strategy) {
+	@Path("/strategyList")
+	public Response list(@QueryParam("stategy") String strategy) {
 		Data data = new Data();
-		data.setPricesStrategy(registry.getPrices().get(strategy));
+		data.setPricesStrategy(pickerService.getStrategyPrices(strategy));
+		return Response.ok().entity(data).build();
+	}
+
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Path("/symbolList")
+	public Response listBySymbolTimeframe(@QueryParam("symbol") String symbol, @QueryParam("window") String window, @QueryParam("interval") String interval) {
+		Data data = new Data();
+		if (StringUtils.isEmpty(window) && StringUtils.isEmpty(interval)) {
+			data.setPricesStrategy(pickerService.getSymbolPrices(symbol));
+		}
+		else {
+			data.setPricesStrategy(pickerService.getSymbolPrices(symbol, window, interval));
+		}
 		return Response.ok().entity(data).build();
 	}
 
@@ -64,7 +76,7 @@ public class DataController {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/acquire")
 	public Response acquire(@QueryParam(value = "symbol") String symbol) throws InterruptedException, ExecutionException, JsonParseException, JsonMappingException, IOException {
-		service.acquire(symbol);
+		apiService.acquire(symbol);
 		return Response.ok().build();
 	}
 
@@ -72,7 +84,7 @@ public class DataController {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/dispose")
 	public Response dispose(@QueryParam(value = "symbol") String symbol) throws JsonParseException, JsonMappingException, InterruptedException, ExecutionException, IOException {
-		service.dispose(symbol);
+		apiService.dispose(symbol);
 		return Response.ok().build();
 	}
 

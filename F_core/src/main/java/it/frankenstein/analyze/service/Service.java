@@ -30,7 +30,7 @@ public class Service {
 		this.commonConfig = commonConfig;
 	}
 
-	public Map<String,LinkedList<String>> getLists() {
+	public Map<String, LinkedList<String>> getLists() {
 		ClientResponse response = c.resource(commonConfig.getDataUrl())
 				.path("data/lists")
 				.accept(MediaType.APPLICATION_JSON)
@@ -40,9 +40,9 @@ public class Service {
 		return item.getPricesAll();
 	}
 
-	public List<String> getData(String strategy) {
+	public List<String> getDataByStrategy(String strategy) {
 		ClientResponse response = c.resource(commonConfig.getDataUrl())
-				.path("data/singleList")
+				.path("data/strategyList")
 				.queryParam("stategy", strategy)
 				.accept(MediaType.APPLICATION_JSON)
 				.get(ClientResponse.class);
@@ -50,7 +50,31 @@ public class Service {
 		Data item = response.getEntity(Data.class);
 		return item.getPricesStrategy();
 	}
-	
+
+	public List<String> getDataBySymbol(String symbol) {
+		ClientResponse response = c.resource(commonConfig.getDataUrl())
+				.path("data/symbolList")
+				.queryParam("symbol", symbol)
+				.accept(MediaType.APPLICATION_JSON)
+				.get(ClientResponse.class);
+
+		Data item = response.getEntity(Data.class);
+		return item.getPricesStrategy();
+	}
+
+	public List<String> getDataBySymbolTimeframe(String symbol, String timeWindow, String interval) {
+		ClientResponse response = c.resource(commonConfig.getDataUrl())
+				.path("data/symbolList")
+				.queryParam("symbol", symbol)
+				.queryParam("window", timeWindow)
+				.queryParam("interval", interval)
+				.accept(MediaType.APPLICATION_JSON)
+				.get(ClientResponse.class);
+
+		Data item = response.getEntity(Data.class);
+		return item.getPricesStrategy();
+	}
+
 	public String acquire(String symbol) {
 		ClientResponse response = c.resource(commonConfig.getDataUrl())
 				.path("data/acquire")

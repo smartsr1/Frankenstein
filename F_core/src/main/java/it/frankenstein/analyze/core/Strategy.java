@@ -21,10 +21,10 @@ public class Strategy {
 
 	public void test() {
 		// download data
-		Map<String,LinkedList<String>> lists = service.getLists();
-		//or 
-		List<String> listStrategy = service.getData("600/10");
-		
+		Map<String, LinkedList<String>> lists = service.getLists();
+		// or
+		List<String> listStrategy = service.getDataByStrategy("600/10");
+
 		// gestiore i dati e applicare la strategia
 		// call post acquisto binance ( io direi di chiamare bin tramite il module data in modulo data)
 		service.acquire("symbol");
